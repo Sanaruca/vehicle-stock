@@ -1,0 +1,29 @@
+extends layout
+
+block append head
+  link(rel="stylesheet", href="/stylesheets/sass/vehiclesList.css")
+
+block content 
+
+  section.grid-content
+
+    if vehicles 
+      each vehicle in vehicles 
+        .card-box
+          .show-more-content
+            .circle
+            .circle
+            .circle
+          .img-content
+            if vehicle.image
+              img(src= vehicle.image, alt="")
+            else 
+              .asImg
+          h2: a(href=`/all/auto/${vehicle.brand.companyname}/${vehicle.model.name}`): span #{vehicle.brand.companyname} #{vehicle.model.name}
+          .cirrent-price $ #[span #{vehicle.price}]
+          .category category: #[span #{vehicle.category.name}]
+
+  script(src="/javascripts/navbar.js")
+
+
+  

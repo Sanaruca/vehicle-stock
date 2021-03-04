@@ -1,0 +1,48 @@
+extends layout
+
+block append head
+    
+  link(rel="stylesheet" href="/stylesheets/sass/index.css")
+
+  script.
+    window.onload = ()=>{
+      window.addEventListener("scroll", () =>{
+        const header = document.querySelector("header");
+        header.classList.toggle("onScroll", window.scrollY > 360)
+      })
+    }
+
+block content
+  .carucel.content
+    .img.carucel#c-index0
+
+  h1= title
+  p Welcome to #{title}
+
+
+
+  section#1.grid-content
+
+    .box
+      h3 find your ideal car
+      p Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        | Tempore ab eius error quidem nobis modi assumenda in corporis,
+        | reprehenderit voluptatum eum recusandae consequatur voluptas
+        | aperiam voluptatem perspiciatis, saepe vel earum!
+
+      
+
+    if brands
+      .grid-content
+        each brand in brands
+          .box
+            .img-content
+              .circle.asImg
+            p #{brand.companyname}
+
+
+
+  //- if vehicles
+  //-   section#2.list-content.grid-content
+  //-     each vehicle in vehicles
+  //-       +card(vehicle)

@@ -1,0 +1,13 @@
+extends layout
+
+block append head
+
+
+block content
+  h1 #{title}
+  if categories
+    ul
+      each category in categories
+        li: a(href="/all/category/" + category.name) #{category.name}
+        
+  script(src="/javascripts/navbar.js")

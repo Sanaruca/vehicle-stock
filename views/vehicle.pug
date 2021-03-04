@@ -1,0 +1,39 @@
+extends layout
+
+block append head
+
+  
+  link(rel="stylesheet" href="/stylesheets/sass/vehicle.css")
+
+block content 
+
+
+  section.grid-content
+    .box
+      h1 #{title}
+
+      if data.description 
+        p #{data.description}
+      else
+        p Lorem ipsum dolor sit amet consectetur adipisicing
+          | elit. Impedit nulla ipsam fugiat amet laborum ex
+          | ipsum dolor nostrum molestias neque inventore, quis
+          | suscipit dolore cum dicta qui. Blanditiis, sequi.
+          | Optio, beatae expedita. Beatae dolore soluta magni
+          | atque reprehenderit, laboriosam blanditiis.
+
+      ul.caracteristics
+        li Lorem, ipsum.
+        li Lorem, ipsum.
+        li Lorem, ipsum.
+        li Lorem, ipsum.
+      
+
+      .price: span.price-current $ #{data.price}
+
+      a(href="#", style="display: inline-block").btn visit site
+      a(href="javascript:void(0)" onclick="window.location.pathname += '/update'").btn Update
+    .img-content
+      .asImg
+      
+  script(src="/javascripts/navbar.js")

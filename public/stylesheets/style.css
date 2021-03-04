@@ -1,0 +1,140 @@
+@import url("https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=ABeeZee&family=Courgette&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --color1: #af7552;
+  --color2: #d0b072;
+  --color3: #f0d07a;
+  --color4: #e4d5c1;
+  --color5: #e4e0df;
+  --color6: #f7f4f3;
+  --color7: #ad142f;
+  --color8: #695a56;
+}
+
+body{
+  background: #f7f7f7;
+}
+
+
+.hidden{
+  display: none;
+}
+
+.circle{
+  border-radius: 50%;
+}
+
+a {
+  color: #00b7ff;
+}
+
+* {
+  outline: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: "Quicksand", "Dosis", sans-serif;
+}
+
+p,
+h1,
+h2,
+h3 {
+  margin: 10px 0;
+}
+
+.grid-content {
+  display: grid;
+}
+
+body {
+  padding: 0 50px;
+}
+
+.navbar {
+  color: #fff;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* background: var(--color4); */
+  font-size: 1.5em;
+  transition: all .2s;
+  padding: 20px;
+}
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+  font-weight: bold;
+  
+}
+
+.navbar a,
+.navbar li {
+  text-decoration: none;
+  color: #fff;
+  font-family: "Dosis";
+}
+
+.navbar li::after {
+  content: "";
+  width: 0;
+  display: block;
+  height: 4px;
+  background: var(--color8);
+  transition: all 0.3s;
+}
+
+.navbar li:hover::after {
+  width: 100%;
+}
+
+li.dropdown {
+  transition: linear 0.3s;
+}
+
+li.dropdown:hover ul.dropdown-content {
+  position: absolute;
+  display: flex;
+}
+
+ul.dropdown-content {
+  display: none;
+  flex-direction: column;
+  background: var(--color8);
+  right: 0;
+  width: 40%;
+}
+
+.carucel.content {
+  height: 420px;
+  width: 100%;
+  left: 0;
+  top: 0;
+  position: absolute;
+}
+.img.carucel {
+  height: 100%;
+  height: 100%;
+  background-image: url(https://images.pexels.com/photos/2710043/pexels-photo-2710043.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940);
+  /* background-repeat: no-repeat; */
+  background-position: center;
+  background-size: cover;
+}
+
+.onScroll {
+  background: #fff;
+  box-shadow: #00000017 0 1px 12px;
+  padding: 0;
+}
+
+.onScroll a, .onScroll li {
+  color: black;
+}

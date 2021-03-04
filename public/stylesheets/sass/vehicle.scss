@@ -1,0 +1,34 @@
+body {
+  margin-top: 5em;
+
+  section.grid-content {
+    grid-template-columns: 1fr minmax(600px, 1fr);
+    // grid-template-rows: auto;
+    gap: 30px;
+    // background: rgba(240, 88, 0, 0.274);
+
+    .box {
+      .btn {
+        background: var(--color1);
+        padding: 15px 40px;
+        color: #fff;
+        font-weight: 700;
+        transition: all .2s;
+        &:hover{
+          background: var(--color8);
+        }
+      }
+    }
+
+    .img-content {
+      display: flex;
+      background: #0084ff56;
+      height: 400px;
+
+      .asImg {
+        background: #88ff0056;
+        width: 100%;
+      }
+    }
+  }
+}

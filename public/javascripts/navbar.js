@@ -1,0 +1,1 @@
+document.querySelector(".navbar").classList.add("onScroll");

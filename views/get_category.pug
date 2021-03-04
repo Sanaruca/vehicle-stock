@@ -1,0 +1,14 @@
+extends layout
+
+block append head
+
+
+block content
+  h1 #{title}: #{category.name}
+
+  if vehicles
+    ul
+      each vehicle in vehicles
+        li: a(href=`/all/auto/${vehicle.brand.companyname}/${vehicle.model.name}`) #{vehicle.brand.companyname} #{vehicle.model.name}
+        
+  script(src="/javascripts/navbar.js")

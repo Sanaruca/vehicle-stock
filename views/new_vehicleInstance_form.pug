@@ -1,0 +1,50 @@
+extends layout
+
+block append head
+
+  
+  link(rel='stylesheet' href='/stylesheets/sass/main.css')
+
+block content
+  h1 #{title}
+
+  form.grid-content(action="" method="post")
+
+    .content
+    
+    .content
+
+      .input-content
+        label(for="vehicle") vehicle
+        select#vehicle(
+          name="vehicle",
+          onclick="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/brand'"
+        )
+          if results
+            each vehicle in results
+              option(value= vehicle._id) #{vehicle.brand.companyname} #{vehicle.model.name}
+
+          option new vehicle
+
+      .input-content
+        label(for="color") color
+        input(type="color" name="color")
+
+      .input-content
+        label(for="rinZise") rinZise
+        input(type="number" name="rinZise")
+
+      .buttons
+        +btnBack
+        button(type="submit") Create
+
+  if errors
+    .alert(onclick="this.style.display = 'none'")
+      .alert-content
+        .icon-error-x
+          .sides-container
+            .side#x-lateral1
+            .side#x-lateral2
+          button Ok
+          
+  script(src="/javascripts/navbar.js")

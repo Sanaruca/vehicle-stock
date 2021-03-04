@@ -1,0 +1,36 @@
+body {
+  margin-top: 5em;
+}
+
+body section.grid-content {
+  -ms-grid-columns: 1fr minmax(600px, 1fr);
+      grid-template-columns: 1fr minmax(600px, 1fr);
+  gap: 30px;
+}
+
+body section.grid-content .box .btn {
+  background: var(--color1);
+  padding: 15px 40px;
+  color: #fff;
+  font-weight: 700;
+  -webkit-transition: all .2s;
+  transition: all .2s;
+}
+
+body section.grid-content .box .btn:hover {
+  background: var(--color8);
+}
+
+body section.grid-content .img-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background: #0084ff56;
+  height: 400px;
+}
+
+body section.grid-content .img-content .asImg {
+  background: #88ff0056;
+  width: 100%;
+}
+/*# sourceMappingURL=vehicle.css.map */

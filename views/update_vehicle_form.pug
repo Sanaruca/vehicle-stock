@@ -1,0 +1,49 @@
+extends layout
+
+
+block append head  
+  link(rel='stylesheet' href='/stylesheets/sass/main.css')
+
+block content
+  h1 #{title}
+
+  form.grid-content(action="" method="post")
+
+    .content
+      .input-content
+
+    .content
+      input(type="hidden", name="vehicleId", value=result._id.toString())
+      .input-content
+        label(for="type") type
+        select#type(name="type")
+          option(value="auto") auto
+          option(value="moto") moto
+
+
+      if categories
+        .input-content
+
+          label(for="category") category
+          select#category(name="category" onchange="if(this.value === 'new') window.location.pathname = '/new/category'")
+            each category in categories
+              option(value= category._id, selected= (category._id.toString() === result.category._id.toString())? "selected" : false ) #{category.name}
+            option(value="new") New Category
+
+
+      .input-content
+        label(for="description") description
+        textarea#description(name="description" cols="30" rows="10")
+
+      .input-content
+        label(for="price") price
+        input#price(type="text" name="price" value= result.price)
+
+      .buttons
+        +btnBack
+        button(type="submit") Update
+
+
+
+
+  script(src="/javascripts/navbar.js")
