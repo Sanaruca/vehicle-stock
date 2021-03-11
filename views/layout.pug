@@ -29,13 +29,16 @@ html
           li: a(href="/") home
           li: a(href="/all/categories") categories
           li: a(href="/all/vehicles") Vehicles
-          li.dropdown new
-            ul.dropdown-content
-              li: a(href="/new/vehicleinstance") new vehicle instance
-              li: a(href="/new/brand") new brand of vehicle
-              li: a(href="/new/model") new model of vehicle
-              li: a(href="/new/category") new category of vehicle
-              li: a(href="/new/vehicle") new vehicle
+          li: a.btn(href="/signUp") sign up
+          li: a.btn(href="/signIn") sign in
+          //- li.dropdown new
+          //-   ul.dropdown-content
+          //-     li: a(href="/new/vehicleinstance") new vehicle instance
+          //-     li: a(href="/new/brand") new brand of vehicle
+          //-     li: a(href="/new/model") new model of vehicle
+          //-     li: a(href="/new/category") new category of vehicle
+          //-     li: a(href="/new/vehicle") new vehicle
+          //-     li: a(href="/signUp") sign up
     block content
     .toremove(style="margin-top: 100em")
       .colores(style={

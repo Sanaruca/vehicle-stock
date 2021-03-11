@@ -1,0 +1,15 @@
+if signUpMessage
+  p #{signUpMessage}
+
+form(action="" method="post")
+  .content
+    .input-content
+      label(for="email") email 
+      input#email(type="email" name="email")
+
+  .content
+    .input-content
+      label(for="password")  password
+      input#password(type="password" name="password")
+
+  input(type="submit" value="send")
