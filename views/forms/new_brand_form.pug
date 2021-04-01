@@ -1,7 +1,7 @@
 extends ../utils/layout
 
 block append head
-  link(rel='stylesheet' href='/stylesheets/sass/main.css')
+  link(rel='stylesheet' href='/stylesheets/forms/index.css')
 block content
   h1 #{title}
 
@@ -19,23 +19,22 @@ block content
     .box-content
       .input-content
         label(for="company") company name
-        input#company(type="text" name="companyname")
+        input#company(type="text" name="companyname", required)
       .input-content
         label(for="website") website
-        input#website(type="text" name="website" placeholder="url")
+        input#website(type="text" name="website" placeholder="url", required)
 
       .buttons
         +btnBack
         button(type="submit") Create
 
-  script.
-    const values = !{JSON.stringify(values)}
-    console.log(values)
-    if (values){
-
-      values.forEach((el)=>{
-        let element = document.querySelector(`input[name=${el.param}]`)
-        element.value = el.param.value || "";
-      });
-
-    }
+  if dataSent
+    script.
+      const values = !{JSON.stringify(dataSent)}
+      console.log(values)
+      if (values){
+        for (const key in values) {
+          document.querySelector(`input[name='${key}']`)
+            .value = values[key]
+        }
+      }

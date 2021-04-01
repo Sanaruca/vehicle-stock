@@ -1,0 +1,9 @@
+form {
+  background: #eeeae6;
+  grid-template-columns: 1fr 1fr;
+  height: 500px;
+}
+form .box-content {
+  margin: auto;
+  overflow: auto;
+}

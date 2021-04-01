@@ -35,7 +35,7 @@ const Vehicle = require("../../models/vehicle");
 const VehicleInstance = require("../../models/instance");
 
 //*-------------------------------------------------------------------------//
-//*..................................Brand..................................// <-----------------
+//*..................................Brand..................................//
 //*-------------------------------------------------------------------------//
 exports.get_newBrand = (req, res) => {
   res.render("./forms/new_brand_form", {
@@ -44,34 +44,37 @@ exports.get_newBrand = (req, res) => {
 };
 
 exports.post_newBrand = [
-  body("companyname").trim().isLength({ min: 1 }).escape(),
-  body("website").trim().not().isEmpty().isURL().escape(),
+  body("companyname", "branch value must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("website", "the web value must be a valid url").trim().isURL().escape(),
 
   async (req, res, next) => {
     const errors = validationResult(req);
     consoleError(errors.array(), "invalid data form!");
-    consoleError(req.body, "lo otro!");
+    consoleError(req.body, "data Sent!");
 
     if (errors.isEmpty()) {
       const { companyname, website, logo } = req.body;
       const brand = new Brand({ companyname, website });
 
-      const isThereOneBrandWithThisName = await Brand.findOne({ companyname });
+      const isUsed = await Brand.findOne({ companyname });
+      if (!isUsed) await brand.save();
 
-      if (find) await brand.save();
       res.redirect("/");
     }
 
     res.render("./forms/new_brand_form", {
       title: "Register a new brand",
       errors: errors.array(),
-      values: req.body
+      dataSent: req.body,
     });
   },
 ];
 
 //*-------------------------------------------------------------------------//
-//*..................................Model..................................//
+//*..................................Model..................................// <-----------------
 //*-------------------------------------------------------------------------//
 
 exports.get_newModel = async (req, res) => {
