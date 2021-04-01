@@ -5,8 +5,8 @@ const Brand = require("../models/brand");
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
-  const results = await Brand.find().limit(6);
-  res.render("index", { title: "Welcome", brands: results });
+  const brands = await Brand.find().limit(6);
+  res.render("index", { title: "Welcome", brands });
 });
 
 module.exports = router;

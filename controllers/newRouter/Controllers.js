@@ -1,4 +1,4 @@
-require("dotenv").config()
+require("dotenv").config();
 
 const { consoleMessage, consoleError } = require("../../utils/console");
 const { validationResult, body } = require("express-validator");
@@ -34,39 +34,39 @@ const Category = require("../../models/category");
 const Vehicle = require("../../models/vehicle");
 const VehicleInstance = require("../../models/instance");
 
-exports.get_newBrand = async (req, res) => {
-  const img = await getPhotoFromPexels();
-  // console.log("img", img);
-  res.render("new_brand_form", { title: "Register a new brand", img });
+//*-------------------------------------------------------------------------//
+//*..................................Brand..................................// <-----------------
+//*-------------------------------------------------------------------------//
+exports.get_newBrand = (req, res) => {
+  res.render("./forms/new_brand_form", {
+    title: "Register a new brand",
+  });
 };
 
 exports.post_newBrand = [
   body("companyname").trim().isLength({ min: 1 }).escape(),
-
-  body("website").trim().escape(),
+  body("website").trim().not().isEmpty().isURL().escape(),
 
   async (req, res, next) => {
     const errors = validationResult(req);
-    console.log(errors.array());
+    consoleError(errors.array(), "invalid data form!");
+    consoleError(req.body, "lo otro!");
 
     if (errors.isEmpty()) {
-      let brand = new Brand({
-        companyname: req.body.companyname,
-        website: req.body.website,
-        logo: req.body.logo,
-      });
+      const { companyname, website, logo } = req.body;
+      const brand = new Brand({ companyname, website });
 
-      //*------------------------//
-      const find = await Brand.find({ companyname: req.body.companyname });
-      if (find.length < 1) await brand.save();
+      const isThereOneBrandWithThisName = await Brand.findOne({ companyname });
+
+      if (find) await brand.save();
       res.redirect("/");
-      //*------------------------//
-    } else {
-      res.render("new_brand_form", {
-        title: "Register a new brand",
-        errors: errors.array(),
-      });
     }
+
+    res.render("./forms/new_brand_form", {
+      title: "Register a new brand",
+      errors: errors.array(),
+      values: req.body
+    });
   },
 ];
 
@@ -78,7 +78,7 @@ exports.get_newModel = async (req, res) => {
   const results = await findBrands();
   console.log(results);
   consoleMessage("results:", results);
-  res.render("new_model_form", {
+  res.render("./forms/new_model_form", {
     title: "Register a new model of vehicle",
     registedBrands: results,
   });
@@ -107,7 +107,7 @@ exports.post_newModel = [
       res.redirect("/");
     }
     const results = await findBrands();
-    res.render("new_model_form", {
+    res.render("./forms/new_model_form", {
       title: "Register a new model of vehicle",
       registedBrands: results,
       errors: errors.array(),
@@ -119,7 +119,7 @@ exports.post_newModel = [
 //*.................................Category.................................//
 //*-------------------------------------------------------------------------//
 exports.get_newCategory = (req, res) => {
-  res.render("new_category_form", { title: "New Category" });
+  res.render("./forms/./forms/new_category_form", { title: "New Category" });
 };
 
 exports.post_newCategory = [
@@ -143,7 +143,7 @@ exports.post_newCategory = [
       res.redirect("/");
       //*------------------------//
     } else {
-      res.render("new_brand_form", {
+      res.render("./forms/./forms/new_brand_form", {
         title: "New Category",
         errors: errors.array(),
       });
@@ -165,7 +165,7 @@ exports.get_newVehicle = async (req, res) => {
   const brands = results[1];
   const models = results[2];
 
-  res.render("new_vehicle_form", {
+  res.render("./forms/new_vehicle_form", {
     title: "New vehicle",
     categories,
     brands,
@@ -241,7 +241,7 @@ exports.post_newVehicle = [
       const brands = results[1];
       const models = results[2];
 
-      res.render("new_vehicle_form", {
+      res.render("./forms/new_vehicle_form", {
         title: "New vehicle",
         categories,
         brands,
@@ -259,7 +259,7 @@ exports.get_VehicleInstance = async (req, res) => {
 
   consoleMessage("aver:", results);
 
-  res.render("new_vehicleInstance_form", {
+  res.render("./forms/new_vehicleInstance_form", {
     title: "Post a new vehicle",
     results,
   });
@@ -274,26 +274,20 @@ exports.post_VehicleInstance = [
     const errors = validationResult(req);
 
     if (errors.isEmpty()) {
-
-      let vehicleInstance = new VehicleInstance({
-        vehicle: req.body.vehicle,
-        color: req.body.color,
-        rinZise: req.body.rinZise,
-      });
-
+      const { vehicle, color, rinZise } = req.body;
+      const vehicleInstance = new VehicleInstance({ vehicle, color, rinZise });
       await vehicleInstance.save();
 
       res.redirect("/");
     }
-    consoleError(errors);
 
+    consoleError(errors);
     const results = await findVehicles();
 
-
-    res.render("new_vehicleInstance_form", {
+    res.render("./forms/new_vehicleInstance_form", {
       title: "Post a new vehicle",
       results,
-      errors: errors.array()
+      errors: errors.array(),
     });
   },
 ];

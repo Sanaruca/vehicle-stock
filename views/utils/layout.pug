@@ -1,0 +1,42 @@
+mixin btnBack
+  button(type="button" onclick="history.go(-1)") Back
+
+mixin card(vehicle)
+  .card-content
+    .img-content
+      img(src="/images/car.png", alt="", srcset="")
+      .logo-brand-content
+        .triangulo-equilatero-bottom
+
+    .showmore
+      .circle#c1
+      .circle#c2
+      .circle#c3
+    p #{vehicle.brand.companyname} #{vehicle.model.name}
+    p #{vehicle.description}
+    p #{vehicle.price}
+
+
+doctype html
+html
+  block head
+    title= title
+    link(rel='stylesheet' href='/stylesheets/style.css')
+  body
+    header.navbar
+      nav
+        ul
+          li: a(href="/") home
+          li: a(href="/all/categories") categories
+          li: a(href="/all/vehicles") vehicles
+          li: a.btn(href="/signUp") sign up
+          li: a.btn(href="/signIn") sign in
+          li.dropdown new
+            ul.dropdown-content
+              li: a(href="/new/vehicleinstance") new vehicle instance
+              li: a(href="/new/brand") new brand of vehicle
+              li: a(href="/new/model") new model of vehicle
+              li: a(href="/new/category") new category of vehicle
+              li: a(href="/new/vehicle") new vehicle
+              li: a(href="/signUp") sign up
+    block content

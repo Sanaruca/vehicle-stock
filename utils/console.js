@@ -15,9 +15,9 @@ exports.consoleMessage = (initialtext, any = "(～￣▽￣)～ You are the best
   console.log("-".repeat(30).rainbow, "\n\n\n");
 };
 
-exports.consoleError = (error) => {
+exports.consoleError = (error, message = "There are an error:") => {
   console.log("\n" + "-".repeat(60).red);
-  console.error("There are an error:".red);
+  console.error(message.red);
   console.log("-".repeat(60).red);
   console.error(error);
   console.log("-".repeat(30).red, "\n\n\n");

@@ -50,30 +50,22 @@ app.use(
     saveUninitialized: false,
   })
 );
-app.use(passport.initialize());
-app.use(connectFlash()); //> must be here
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(connectFlash()); //> must be here
+// app.use(passport.session());
 
-app.use((req, res, next) => {
-  app.locals.signUpMessage = req.flash("signUpMessage"); //> variable accessible throughout the application
-  app.locals.signInMessage = req.flash("signInMessage"); //> variable accessible throughout the application
-  next();
-});
+// app.use((req, res, next) => {
+//   app.locals.signUpMessage = req.flash("signUpMessage"); //> variable accessible throughout the application
+//   app.locals.signInMessage = req.flash("signInMessage"); //> variable accessible throughout the application
+//   next();
+// });
 
 //o ................................. routers ................................ */
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 app.use("/all", allRouter);
-app.use(
-  "/new",
-  (req, res, next) => {
-    if (req.isAuthenticated()) return next();
-
-    res.redirect("/");
-  },
-  newRouter
-);
+app.use("/new",newRouter);
 
 app.use("/signUp", signUpRouter);
 app.use("/signIn", signInRouter);
@@ -93,7 +85,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.render("./utils/error");
 });
 
 module.exports = app;

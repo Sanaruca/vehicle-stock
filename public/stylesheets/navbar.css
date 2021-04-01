@@ -1,0 +1,57 @@
+.navbar {
+  color: #fff;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* background: var(--color4); */
+  font-size: 1.5em;
+  transition: all .2s;
+  padding: 20px;
+}
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+  font-weight: bold;
+  
+}
+
+.navbar a,
+.navbar li {
+  text-decoration: none;
+  color: #fff;
+  font-family: "Dosis";
+}
+
+.navbar li::after {
+  content: "";
+  width: 0;
+  display: block;
+  height: 4px;
+  background: var(--color8);
+  transition: all 0.3s;
+}
+
+.navbar li:hover::after {
+  width: 100%;
+}
+
+li.dropdown {
+  transition: linear 0.3s;
+}
+
+li.dropdown:hover ul.dropdown-content {
+  position: absolute;
+  display: flex;
+}
+
+ul.dropdown-content {
+  display: none;
+  flex-direction: column;
+  background: var(--color8);
+  right: 0;
+  width: 40%;
+}

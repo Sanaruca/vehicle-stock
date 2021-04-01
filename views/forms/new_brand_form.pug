@@ -1,0 +1,41 @@
+extends ../utils/layout
+
+block append head
+  link(rel='stylesheet' href='/stylesheets/sass/main.css')
+block content
+  h1 #{title}
+
+  if errors
+    ul 
+      each err in errors
+        li #{err.msg}
+
+  form.grid-content(action="" method="post")
+
+    .box-content
+      .input-content
+        input(type="file" name="logo")
+
+    .box-content
+      .input-content
+        label(for="company") company name
+        input#company(type="text" name="companyname")
+      .input-content
+        label(for="website") website
+        input#website(type="text" name="website" placeholder="url")
+
+      .buttons
+        +btnBack
+        button(type="submit") Create
+
+  script.
+    const values = !{JSON.stringify(values)}
+    console.log(values)
+    if (values){
+
+      values.forEach((el)=>{
+        let element = document.querySelector(`input[name=${el.param}]`)
+        element.value = el.param.value || "";
+      });
+
+    }

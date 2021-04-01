@@ -14,7 +14,7 @@ const {
 } = require("../controllers/newRouter/Controllers");
 
 function noimplemented(req, res) {
-  res.send("no implementado");
+  res.redirect("/new/brand");
 }
 
 router.get("/", noimplemented);
