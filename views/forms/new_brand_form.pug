@@ -30,11 +30,11 @@ block content
 
   if dataSent
     script.
-      const values = !{JSON.stringify(dataSent)}
-      console.log(values)
-      if (values){
-        for (const key in values) {
-          document.querySelector(`input[name='${key}']`)
-            .value = values[key]
-        }
+      const data = !{JSON.stringify(dataSent)}
+      console.log(data)
+
+      for (const key in data) {
+        document.querySelector(`input[name='${key}']`)
+          .value = data[key]
       }
+      

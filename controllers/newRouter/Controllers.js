@@ -59,8 +59,8 @@ exports.post_newBrand = [
       const { companyname, website, logo } = req.body;
       const brand = new Brand({ companyname, website });
 
-      const isUsed = await Brand.findOne({ companyname });
-      if (!isUsed) await brand.save();
+      const isRegisted = await Brand.findOne({ companyname });
+      if (!isRegisted) await brand.save();
 
       res.redirect("/");
     }
@@ -78,42 +78,46 @@ exports.post_newBrand = [
 //*-------------------------------------------------------------------------//
 
 exports.get_newModel = async (req, res) => {
-  const results = await findBrands();
-  console.log(results);
-  consoleMessage("results:", results);
+  const registedBrands = await findBrands();
+  consoleMessage("registed brands:", registedBrands);
+
   res.render("./forms/new_model_form", {
     title: "Register a new model of vehicle",
-    registedBrands: results,
+    registedBrands,
   });
 };
 
 exports.post_newModel = [
-  body("name", "valor no espesificado").trim().isLength({ min: 1 }).escape(),
-  body("brand", "valor no espesificado").trim().isLength({ min: 1 }).escape(),
-  body("year").isAlphanumeric().escape(),
-  async (req, res, next) => {
-    const errors = validationResult(req);
-    if (errors.isEmpty()) {
-      let model = new Model({
-        name: req.body.name,
-        brand: req.body.brand,
-        year: req.body.year,
-      });
+  body("modelName", "brand's model name most be especified")
+    .trim()
+    .not()
+    .isEmpty()
+    .escape(),
+  body("brand", "valor no espesificado").trim().not().isEmpty().escape(),
+  body("year", "inTest").isNumeric().isAfter("1885-01-01").escape(), //!ojo
 
-      //*------------------------//
-      const find = await Model.findOne({
-        name: req.body.name,
-        brand: req.body.brand,
-      });
-      if (!find) await model.save();
-      //*------------------------//
+  async (req, res) => {
+    const errors = validationResult(req);
+    const { modelName, brand, year } = req.body;
+    const dataSent = { modelName, brand, year };
+
+    if (errors.isEmpty()) {
+      const model = new Model(dataSent);
+      const isRegisted = await Model.findOne(dataSent);
+
+      if (!isRegisted) await model.save();
+
       res.redirect("/");
     }
-    const results = await findBrands();
+
+    const registedBrands = await findBrands();
+    consoleMessage("registedBrands", registedBrands)
+
     res.render("./forms/new_model_form", {
       title: "Register a new model of vehicle",
-      registedBrands: results,
+      registedBrands,
       errors: errors.array(),
+      dataSent,
     });
   },
 ];
@@ -149,6 +153,7 @@ exports.post_newCategory = [
       res.render("./forms/./forms/new_brand_form", {
         title: "New Category",
         errors: errors.array(),
+        dataSent: req.body,
       });
     }
   },

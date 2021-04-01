@@ -1,43 +1,67 @@
 extends ../utils/layout
 
 block append head
-  link(rel='stylesheet' href='/stylesheets/sass/main.css')
+  link(rel='stylesheet' href='/stylesheets/forms/index.css')
 
 block content
+
+  if errors
+    ul
+      each err in errors 
+        li #{err.msg}
+
   h1 #{title}
   form.grid-content(action="" method="post")
     
-    .content
+    .box-content
     
-    .content
-      .input-content
-        label(for="name") Model name
-        input#name(type="text" name="name")
-
+    .box-content
       .input-content
         label(for="brand") Brand
         select#brand(
           name="brand",
-          onclick="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/brand'" 
+          onchange="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/brand'" 
           )
+
           if registedBrands
             each brand in registedBrands
               option(value=brand._id)= brand.companyname
-          option#nobrands New Brand
+          option ---------
+          option New Brand
+
+      .input-content
+        label(for="modelName") Model name
+        input#modelName(type="text" name="modelName")
 
       .input-content
         label(for="year") Year
         input#brand(type="text" name="year")
+      
       .buttons
         +btnBack
         button(type="submit") Create
-    if errors
-      .alert(onclick="this.style.display = 'none'")
-        .alert-content
-          .icon-error-x
-            .sides-container
-              .side#x-lateral1
-              .side#x-lateral2
-          button Ok
+    
 
-  script(src="/javascripts/navbar.js")
+  if dataSent
+    script.
+      const data = !{JSON.stringify(dataSent)}
+      console.log(data)
+
+      for (const key in data) {
+
+        if (key === "brand"){
+          const $select = document.querySelector("#brand"),
+            options = $select.options
+
+          for (const index in options)
+
+          if (options[index] === data[key]){
+            $select.selectedIndex  = options[index]
+            break;
+          }
+
+        } else {
+          document.querySelector(`input[name='${key}']`)
+            .value = data[key]
+        }
+      }
