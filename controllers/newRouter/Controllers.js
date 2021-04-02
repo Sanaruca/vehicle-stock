@@ -127,7 +127,7 @@ exports.post_newModel = [
 ];
 
 //*-------------------------------------------------------------------------//
-//*.................................Category.................................// <-----------------
+//*.................................Category.................................//
 //*-------------------------------------------------------------------------//
 exports.get_newCategory = (req, res) => {
   res.render("./forms/new_category_form", { title: "New Category" });
@@ -162,7 +162,7 @@ exports.post_newCategory = [
   },
 ];
 //*-------------------------------------------------------------------------//
-//*.................................Vehicle.................................//
+//*.................................Vehicle.................................// <-----------------
 //*-------------------------------------------------------------------------//
 exports.get_newVehicle = async (req, res) => {
   const results = await Promise.all([
@@ -171,10 +171,11 @@ exports.get_newVehicle = async (req, res) => {
     findModels(),
   ]);
 
-  // consoleMessage("...", results);
-  const categories = results[0];
-  const brands = results[1];
-  const models = results[2];
+  const categories = results[0],
+    brands = results[1],
+    models = results[2];
+
+  consoleMessage("modles", models);
 
   res.render("./forms/new_vehicle_form", {
     title: "New vehicle",
@@ -185,81 +186,62 @@ exports.get_newVehicle = async (req, res) => {
 };
 
 exports.post_newVehicle = [
-  body("type").trim().isLength({ min: 1 }).isAlphanumeric().escape(),
+  body("type","1").trim().notEmpty().isAlpha().escape(),
+  body("category","2").trim().notEmpty().isAlphanumeric().escape(),
+  body("brand","3").trim().notEmpty().isAlphanumeric().escape(),
+  body("model","4").trim().notEmpty().isAlphanumeric().escape(),
+  body("description","5").trim().isAlphanumeric().escape(),
+  body("price","6").trim().toInt(),
+  body("image","7").optional({nullable:true}).escape(),
 
-  body("category").trim().isLength({ min: 1 }).isAlphanumeric().escape(),
+  async (req, res) => {
+    const errors = validationResult(req),
+      {
+        type,
+        category,
+        brand,
+        modelName,
+        description,
+        price,
+        image,
+      } = req.body,
+      dataSent = {
+        type,
+        category,
+        brand,
+        modelName,
+        description,
+        price,
+        image,
+      };
 
-  body("brand").trim().isLength({ min: 1 }).isAlphanumeric().escape(),
-
-  body("model").trim().isLength({ min: 1 }).isAlphanumeric().escape(),
-
-  body("description").trim().escape(),
-
-  body("price").trim().isNumeric().escape(),
-
-  body("image").trim().escape(),
-
-  async (req, res, next) => {
-    const errors = validationResult(req);
-    console.log(errors.array());
     if (errors.isEmpty()) {
-      let vehicle = new Vehicle({
-        type: req.body.type,
-        category: req.body.category,
-        brand: req.body.brand,
-        model: req.body.model,
-        description: req.body.description,
-        price: req.body.price,
-        image: req.body.image,
-      });
+      const vehicle = new Vehicle(dataSent),
+        isRegisted = await Vehicle.findOne({ brand, model });
 
-      let findVehicle = await Vehicle.findOne({
-        brand: req.body.brand,
-        model: req.body.model,
-      })
-        .populate("brand")
-        .populate("model")
-        .exec();
+      if (!isRegisted) await vehicle.save();
 
-      consoleMessage("existe", findVehicle);
-
-      if (!findVehicle) {
-        await vehicle.save();
-
-        findVehicle = await Vehicle.findById(vehicle._id.toString())
-          .populate("brand")
-          .populate("model")
-          .exec();
-
-        consoleMessage("bidasd:", findVehicle);
-      }
-
-      res.redirect(
-        "/all/auto/" +
-          findVehicle.brand.companyname +
-          "/" +
-          findVehicle.model.name
-      );
-    } else {
-      consoleError(errors);
-      const results = await Promise.all([
-        findCategories(),
-        findBrands(),
-        findModels(),
-      ]);
-
-      const categories = results[0];
-      const brands = results[1];
-      const models = results[2];
-
-      res.render("./forms/new_vehicle_form", {
-        title: "New vehicle",
-        categories,
-        brands,
-        models,
-        errors: errors.array(),
-      });
+      res.redirect(`/all/auto/${companyname}/${modelName}`);
     }
+
+    const results = await Promise.all([
+      findCategories(),
+      findBrands(),
+      findModels(),
+    ]);
+
+    const categories = results[0],
+      brands = results[1],
+      models = results[2];
+
+    res.render("./forms/new_vehicle_form", {
+      title: "New vehicle",
+      categories,
+      brands,
+      models,
+      errors: errors.array(),
+      dataSent,
+    });
   },
 ];
 //*-------------------------------------------------------------------------//

@@ -1,27 +1,28 @@
 extends ../utils/layout
+
 block append head
-
-
-  link(rel='stylesheet' href='/stylesheets/sass/main.css')
+  link(rel='stylesheet' href='/stylesheets/forms/index.css')
   
   script.
 
     window.onload = () => showModels()
 
     function showModels() {
-      const models = !{JSON.stringify(models)};
-      const select_brand = document.querySelector("#brand");
-      const select_model = document.querySelector("#model");
+      const models = !{JSON.stringify(models)},
+        $select_brand = document.querySelector("#brand"),
+        $select_model = document.querySelector("#modelName");
 
-      select_model.innerHTML = "<option id='nobrands'>new model</option>";
+      $select_model.innerHTML = 
+        "<option disabled>----------</option>" +
+        "<option>new model</option>";
 
       models.forEach((model) => {
-        if (model.brand === select_brand.value){
-          select_model.innerHTML = 
+        if (model.brand === $select_brand.value){
+          $select_model.innerHTML = 
             `<option value=${model._id}>` +
-              `${model.name}` +
+              `${model.modelName}` +
             "</option>" +
-            select_model.innerHTML
+            $select_model.innerHTML
         }
       })
     }
@@ -30,11 +31,21 @@ block append head
 block content
   h1 #{title}
 
+
+  if errors
+    ul
+      each err in errors 
+        li #{err.msg}
+
   form.grid-content(action="" method="post")
 
-    .content
+    .box-content
+      .input-content
+          label(for="image") image
+          input#image(type="text" name="image")
+
     
-    .content
+    .box-content
       .input-content
         label(for="type") type
         select#type(name="type")
@@ -45,32 +56,36 @@ block content
         label(for="brand") brand
         select#brand(
           name="brand",
-          onclick="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/brand'; showModels()" 
+          onchange="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/brand'; showModels()" 
           )
           if brands
             each brand in brands
               option(value=brand._id)= brand.companyname
-          option#nobrands new brand
+
+          option(disabled) -----------
+          option new brand
 
       .input-content
-        label(for="model") model
-        select#model(
-          name="model",
-          onclick="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/model';"
+        label(for="modelName") model
+        select#modelName(
+          name="modelName",
+          onchange="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/model';"
           )
-          option#nobrands new model
+
+
 
       .input-content
         label(for="category") category
         select#category(
           name="category"
-          onclick="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/category'" 
+          onchange="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/category'" 
         )
           if categories
             each category in categories
               option(value= category._id)= category.name
-          option#categories new categoty
 
+          option(disabled) -----------
+          option#categories new categoty
 
       .input-content
         label(for="description") description
@@ -80,22 +95,7 @@ block content
         label(for="price") price
         input#price(type="text" name="price")
 
-      .input-content
-        label(for="image") image
-        input#image(type="text" name="image")
-
       .buttons
         //- button Back
         +btnBack
         button(type="submit") Create
-
-  if errors
-    .alert(onclick="this.style.display = 'none'")
-      .alert-content
-        .icon-error-x
-          .sides-container
-            .side#x-lateral1
-            .side#x-lateral2
-        button Ok
-        
-  script(src="/javascripts/navbar.js")
