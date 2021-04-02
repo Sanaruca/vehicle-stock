@@ -46,7 +46,7 @@ exports.get_newBrand = (req, res) => {
 exports.post_newBrand = [
   body("companyname", "branch value must be specified")
     .trim()
-    .isLength({ min: 1 })
+    .notEmpty()
     .escape(),
   body("website", "the web value must be a valid url").trim().isURL().escape(),
 
@@ -90,16 +90,16 @@ exports.get_newModel = async (req, res) => {
 exports.post_newModel = [
   body("modelName", "brand's model name most be especified")
     .trim()
-    .not()
-    .isEmpty()
+    .notEmpty()
     .escape(),
-  body("brand", "brand most be especified").trim().not().isEmpty().escape(),
+  body("brand", "brand most be especified").trim().notEmpty().escape(),
   body("year")
     .toInt()
     .custom((value) => {
       if (value < 1885) throw new Error("invalid year");
-      return true
-    }).escape(),
+      return true;
+    })
+    .escape(),
 
   async (req, res) => {
     const errors = validationResult(req);
@@ -130,36 +130,35 @@ exports.post_newModel = [
 //*.................................Category.................................// <-----------------
 //*-------------------------------------------------------------------------//
 exports.get_newCategory = (req, res) => {
-  res.render("./forms/./forms/new_category_form", { title: "New Category" });
+  res.render("./forms/new_category_form", { title: "New Category" });
 };
 
 exports.post_newCategory = [
-  body("name", "El valor debe ser espesificado")
+  body("name", "Category name most be especified")
     .trim()
-    .isLength({ min: 1 })
+    .notEmpty()
     .isAlphanumeric()
     .escape(),
 
-  async (req, res, next) => {
-    const errors = validationResult(req);
+  async (req, res) => {
+    const errors = validationResult(req),
+      { name } = req.body,
+      dataSent = { name };
 
     if (errors.isEmpty()) {
-      let category = new Category({
-        name: req.body.name,
-      });
+      const category = new Category(dataSent),
+        isRegisted = await Category.findOne(dataSent);
 
-      //*------------------------//
-      const find = await Category.find({ name: req.body.companyname });
-      if (find.length < 1) await category.save();
+      if (!isRegisted) await category.save();
+
       res.redirect("/");
-      //*------------------------//
-    } else {
-      res.render("./forms/./forms/new_brand_form", {
-        title: "New Category",
-        errors: errors.array(),
-        dataSent: req.body,
-      });
     }
+
+    res.render("./forms/new_category_form", {
+      title: "New Category",
+      errors: errors.array(),
+      dataSent,
+    });
   },
 ];
 //*-------------------------------------------------------------------------//

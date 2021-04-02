@@ -2,6 +2,7 @@ extends ../utils/layout
 
 block append head
   link(rel='stylesheet' href='/stylesheets/forms/index.css')
+  
 block content
   h1 #{title}
 
@@ -37,4 +38,3 @@ block content
         document.querySelector(`input[name='${key}']`)
           .value = data[key]
       }
-      
