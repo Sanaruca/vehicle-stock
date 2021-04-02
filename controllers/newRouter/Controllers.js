@@ -74,7 +74,7 @@ exports.post_newBrand = [
 ];
 
 //*-------------------------------------------------------------------------//
-//*..................................Model..................................// <-----------------
+//*..................................Model..................................//
 //*-------------------------------------------------------------------------//
 
 exports.get_newModel = async (req, res) => {
@@ -93,8 +93,13 @@ exports.post_newModel = [
     .not()
     .isEmpty()
     .escape(),
-  body("brand", "valor no espesificado").trim().not().isEmpty().escape(),
-  body("year", "inTest").isNumeric().isAfter("1885-01-01").escape(), //!ojo
+  body("brand", "brand most be especified").trim().not().isEmpty().escape(),
+  body("year")
+    .toInt()
+    .custom((value) => {
+      if (value < 1885) throw new Error("invalid year");
+      return true
+    }).escape(),
 
   async (req, res) => {
     const errors = validationResult(req);
@@ -111,7 +116,6 @@ exports.post_newModel = [
     }
 
     const registedBrands = await findBrands();
-    consoleMessage("registedBrands", registedBrands)
 
     res.render("./forms/new_model_form", {
       title: "Register a new model of vehicle",
@@ -123,7 +127,7 @@ exports.post_newModel = [
 ];
 
 //*-------------------------------------------------------------------------//
-//*.................................Category.................................//
+//*.................................Category.................................// <-----------------
 //*-------------------------------------------------------------------------//
 exports.get_newCategory = (req, res) => {
   res.render("./forms/./forms/new_category_form", { title: "New Category" });
