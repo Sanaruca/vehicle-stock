@@ -10,7 +10,7 @@ block append head
     function showModels() {
       const models = !{JSON.stringify(models)},
         $select_brand = document.querySelector("#brand"),
-        $select_model = document.querySelector("#modelName");
+        $select_model = document.querySelector("#model");
 
       $select_model.innerHTML = 
         "<option disabled>----------</option>" +
@@ -30,7 +30,6 @@ block append head
 
 block content
   h1 #{title}
-
 
   if errors
     ul
@@ -66,9 +65,9 @@ block content
           option new brand
 
       .input-content
-        label(for="modelName") model
-        select#modelName(
-          name="modelName",
+        label(for="model") model
+        select#model(
+          name="model",
           onchange="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/model';"
           )
 

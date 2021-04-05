@@ -162,7 +162,7 @@ exports.post_newCategory = [
   },
 ];
 //*-------------------------------------------------------------------------//
-//*.................................Vehicle.................................// <-----------------
+//*.................................Vehicle.................................// <
 //*-------------------------------------------------------------------------//
 exports.get_newVehicle = async (req, res) => {
   const results = await Promise.all([
@@ -186,13 +186,13 @@ exports.get_newVehicle = async (req, res) => {
 };
 
 exports.post_newVehicle = [
-  body("type","1").trim().notEmpty().isAlpha().escape(),
-  body("category","2").trim().notEmpty().isAlphanumeric().escape(),
-  body("brand","3").trim().notEmpty().isAlphanumeric().escape(),
-  body("model","4").trim().notEmpty().isAlphanumeric().escape(),
-  body("description","5").trim().isAlphanumeric().escape(),
-  body("price","6").trim().toInt(),
-  body("image","7").optional({nullable:true}).escape(),
+  body("type").trim().notEmpty().isAlpha().escape(),
+  body("category").trim().notEmpty().isAlphanumeric().escape(),
+  body("brand").trim().notEmpty().isAlphanumeric().escape(),
+  body("model").trim().notEmpty().isAlphanumeric().escape(),
+  body("description").trim().isAlphanumeric().escape(),
+  body("price").trim().notEmpty().toInt().isNumeric(),
+  body("image").optional({nullable:true}).escape(),
 
   async (req, res) => {
     const errors = validationResult(req),
@@ -200,7 +200,7 @@ exports.post_newVehicle = [
         type,
         category,
         brand,
-        modelName,
+        model,
         description,
         price,
         image,
@@ -209,7 +209,7 @@ exports.post_newVehicle = [
         type,
         category,
         brand,
-        modelName,
+        model,
         description,
         price,
         image,
@@ -221,7 +221,7 @@ exports.post_newVehicle = [
 
       if (!isRegisted) await vehicle.save();
 
-      res.redirect(`/all/auto/${companyname}/${modelName}`);
+      res.redirect(`/`);
     }
 
     const results = await Promise.all([
@@ -245,7 +245,7 @@ exports.post_newVehicle = [
   },
 ];
 //*-------------------------------------------------------------------------//
-//*.............................VehicleInstance.............................//
+//*.............................VehicleInstance.............................// <-----------------
 //*-------------------------------------------------------------------------//
 exports.get_VehicleInstance = async (req, res) => {
   const results = await findVehicles();

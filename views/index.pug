@@ -1,29 +1,14 @@
-extends layout
+extends ./utils/layout
 
 block append head
-    
   link(rel="stylesheet" href="/stylesheets/sass/index.css")
 
-  script.
-    window.onload = ()=>{
-      window.addEventListener("scroll", () =>{
-        const header = document.querySelector("header");
-        header.classList.toggle("onScroll", window.scrollY > 360)
-      })
-    }
-
 block content
-  .carucel.content
-    .img.carucel#c-index0
-
   h1= title
   p Welcome to #{title}
 
-
-
-  section#1.grid-content
-
-    .box
+  section.grid-content
+    .box-content
       h3 find your ideal car
       p Lorem ipsum dolor sit amet consectetur adipisicing elit.
         | Tempore ab eius error quidem nobis modi assumenda in corporis,
@@ -39,10 +24,3 @@ block content
             .img-content
               .circle.asImg
             p #{brand.companyname}
-
-
-
-  //- if vehicles
-  //-   section#2.list-content.grid-content
-  //-     each vehicle in vehicles
-  //-       +card(vehicle)
