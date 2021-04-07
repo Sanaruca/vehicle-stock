@@ -1,5 +1,4 @@
 const { Schema, model, SchemaTypes } = require("mongoose");
-const vehicle = require("./vehicle");
 
 const InstanceSchema = new Schema({
   vehicle: {type: SchemaTypes.ObjectId, ref : "Vehicle"},

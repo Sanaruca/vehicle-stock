@@ -192,19 +192,11 @@ exports.post_newVehicle = [
   body("model").trim().notEmpty().isAlphanumeric().escape(),
   body("description").trim().isAlphanumeric().escape(),
   body("price").trim().notEmpty().toInt().isNumeric(),
-  body("image").optional({nullable:true}).escape(),
+  body("image").optional({ nullable: true }).escape(),
 
   async (req, res) => {
     const errors = validationResult(req),
-      {
-        type,
-        category,
-        brand,
-        model,
-        description,
-        price,
-        image,
-      } = req.body,
+      { type, category, brand, model, description, price, image } = req.body,
       dataSent = {
         type,
         category,
@@ -248,38 +240,44 @@ exports.post_newVehicle = [
 //*.............................VehicleInstance.............................// <-----------------
 //*-------------------------------------------------------------------------//
 exports.get_VehicleInstance = async (req, res) => {
-  const results = await findVehicles();
-
-  consoleMessage("aver:", results);
+  const vehicles = await findVehicles();
 
   res.render("./forms/new_vehicleInstance_form", {
     title: "Post a new vehicle",
-    results,
+    vehicles,
   });
 };
 
 exports.post_VehicleInstance = [
-  body("vehicle").isAlphanumeric().isLength({ min: 1 }).escape(),
-  body("color").isLength({ min: 1 }).escape(),
-  body("rinZise").isNumeric().escape(),
+  body("vehicle").notEmpty().isAlphanumeric().escape(),
+  body("color", "Invalid color").notEmpty().isHexColor().escape(),
+  body("rinZise").toInt().isNumeric(),
 
-  async (req, res, next) => {
-    const errors = validationResult(req);
+  async (req, res) => {
+    const errors = validationResult(req),
+      { vehicle, color, rinZise } = req.body,
+      dataSent = { vehicle, color, rinZise };
+
+    consoleMessage("dataSnedataSent",dataSent)
 
     if (errors.isEmpty()) {
-      const { vehicle, color, rinZise } = req.body;
-      const vehicleInstance = new VehicleInstance({ vehicle, color, rinZise });
-      await vehicleInstance.save();
+      const vehicleInstance = new VehicleInstance(dataSent),
+        isRegisted = VehicleInstance.findOne(dataSent);
+
+        
+        consoleMessage("lo guarde?", !isRegisted? true : false)
+        
+      if (!isRegisted) await vehicleInstance.save();
 
       res.redirect("/");
     }
 
-    consoleError(errors);
-    const results = await findVehicles();
+    const vehicles = await findVehicles();
 
     res.render("./forms/new_vehicleInstance_form", {
       title: "Post a new vehicle",
-      results,
+      vehicles,
+      dataSent,
       errors: errors.array(),
     });
   },

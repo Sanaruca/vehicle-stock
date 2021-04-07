@@ -1,49 +1,68 @@
 extends ../utils/layout
 block append head
-
-  
-  link(rel='stylesheet' href='/stylesheets/sass/main.css')
+  link(rel='stylesheet' href='/stylesheets/forms/index.css')
 
 block content
   h1 #{title}
 
+  if errors
+    ul
+      each err in errors 
+        li #{err.msg}
+
   form.grid-content(action="" method="post")
 
-    .content
+    .box-content
     
-    .content
+    .box-content
 
       .input-content
         label(for="vehicle") vehicle
         select#vehicle(
           name="vehicle",
-          onclick="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/brand'"
+          onchange="if (this.selectedIndex === this.options.length -1) window.location.pathname = '/new/brand'"
         )
-          if results
-            each vehicle in results
-              option(value= vehicle._id) #{vehicle.brand.companyname} #{vehicle.model.name}
+          if vehicles
+            each vehicle in vehicles
+              option(value= vehicle._id) #{vehicle.brand.companyname} #{vehicle.model.modelName}
 
+          option(disabled) ------------
           option new vehicle
 
       .input-content
         label(for="color") color
-        input(type="color" name="color")
+        input#color(type="color" name="color")
 
       .input-content
         label(for="rinZise") rinZise
-        input(type="number" name="rinZise")
+        input#rinZise(type="number" name="rinZise")
 
       .buttons
         +btnBack
         button(type="submit") Create
 
-  if errors
-    .alert(onclick="this.style.display = 'none'")
-      .alert-content
-        .icon-error-x
-          .sides-container
-            .side#x-lateral1
-            .side#x-lateral2
-          button Ok
-          
-  script(src="/javascripts/navbar.js")
+  if dataSent
+    script.
+      const data = !{JSON.stringify(dataSent)},
+        $select_vehicle = document.querySelector("select#vehicle"),
+        $input_color = document.querySelector("input#color"),
+        $input_rinZise = document.querySelector("input#rinZise"),
+        options = $select_vehicle.options;
+
+      $input_color.value = data.color;
+      $input_rinZise.value = data.rinZise;
+
+      console.log(data)
+
+      for(const key in options){
+        const value = options[key].value,
+          userSent = value  === data.vehicle;
+
+        if (userSent){
+          $select_vehicle.selectedIndex = key;
+          break;
+        }
+
+        if (Number(key) === options.length-3) break;
+      }
+
